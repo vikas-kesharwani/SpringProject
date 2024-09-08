@@ -1,5 +1,7 @@
 package com.learning.EduQuest.DTO;
 
+import java.util.List;
+
 import com.learning.EduQuest.Entity.Instructor;
 import com.learning.EduQuest.Entity.InstructorDetail;
 
@@ -12,6 +14,16 @@ public class InstructorModel {
 	private String email;
 	
 	private IntructorDetailModel instructorDetail;
+	
+	private List<CourseModel> courses;
+
+	public List<CourseModel> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(List<CourseModel> courses) {
+		this.courses = courses;
+	}
 
 	public String getFirstName() {
 		return firstName;

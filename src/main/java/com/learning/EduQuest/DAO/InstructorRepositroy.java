@@ -3,6 +3,7 @@ package com.learning.EduQuest.DAO;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +24,11 @@ public interface InstructorRepositroy extends JpaRepository<Instructor, Integer>
 //	JPQL Query Example
 //	@Query("SELECT i FROM Instructor i LEFT JOIN i.instructorDet d WHERE d.id = ?1")
 //	public Instructor findInstructorByInstructorDetailID (int Id);
+	
+	
+	
+	//for Deletion of instructor detail only first of all we have to find the instructor and unmap the instructor detail and then delete
+	@Modifying  //@Modifying is used to perform update or delete otherwise will get this error -  No results were returned by the query.
+	@Query(value = "Delete from instructor_detail id01 where id01.id=?1",nativeQuery = true)
+	 void deleteInstructorDetailById(int Id);
 }

@@ -1,5 +1,8 @@
 package com.learning.EduQuest.Entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.learning.EduQuest.DTO.InstructorModel;
 import com.learning.EduQuest.DTO.IntructorDetailModel;
@@ -13,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -36,6 +40,9 @@ public class Instructor {
 	
 	@Column(name = "email")
 	private String email;
+	
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "instructor",cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+	private List<Course> courses;
 
 	public int getId() {
 		return Id;
@@ -77,6 +84,15 @@ public class Instructor {
 		this.email = email;
 	}
 	
+	public List<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
+	
+	
 	public InstructorModel modelMappingwithoutInstDetail() {
 		InstructorModel model = new InstructorModel();
 		model.setEmail(this.getEmail());
@@ -100,4 +116,15 @@ public class Instructor {
 		return model;
 	}
 	
+	public void addCourse(Course course) {
+		if(this.courses==null)
+			this.courses = new ArrayList<>();
+		
+		this.courses.add(course);
+		//map the instructor id to course
+		course.setInstructor(this);
+		
+	}
+	
+
 }
