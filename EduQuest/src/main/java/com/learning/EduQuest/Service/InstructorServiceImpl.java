@@ -11,10 +11,12 @@ import com.learning.EduQuest.DAO.InstructorRepositroy;
 import com.learning.EduQuest.DTO.CourseModel;
 import com.learning.EduQuest.DTO.InstructorModel;
 import com.learning.EduQuest.DTO.ReviewModel;
+import com.learning.EduQuest.DTO.StudentModel;
 import com.learning.EduQuest.Entity.Course;
 import com.learning.EduQuest.Entity.Instructor;
 import com.learning.EduQuest.Entity.InstructorDetail;
 import com.learning.EduQuest.Entity.Review;
+import com.learning.EduQuest.Entity.Student;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -217,6 +219,88 @@ public class InstructorServiceImpl implements InstructorService {
 		Course course = em.find(Course.class, Id);
 		List<Review> reviews = course.getReviews();
 		return reviews;
+	}
+
+	@Override
+	public List<Course> findAllCourses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String addStudent(StudentModel model) {
+		Student st =  new Student();
+		st = model.createEntity();
+		em.persist(st);
+		return "Signed up successfully!";
+	}
+	
+	@Override
+	public String addStudentToCourse(int courseId, int studentId) {
+		Course course = em.find(Course.class, courseId);
+		Student student = em.find(Student.class, studentId);
+		course.addStudent(student);
+		return "enrolled successfully!";
+	}
+
+	@Override
+	public String deleteStudent(int Id) {
+		Student st = em.find(Student.class, Id);
+		
+	//I have observed that if the student entity reference is not present in course reference 
+//	because of which we do not have to remove the  references separately as shown below-(It is present in course_student table which is 3rd table other than these 2)		
+//		List<Course> courses = st.getCourses();
+//		for (Course cr : courses) {
+//			cr.getStudents().remove(st);
+		
+	//Sameway in the deleteCourse method we do not have to remove the references separately. 
+//		because the course_id foreign key is present in review table but there is uni directional relation between review and course entity.
+		
+//		Deletion will only throw foreign key violation if there is bi-directional relation as per my observation
+//		}
+		em.remove(st);
+		return "deleted successfully";
+	}
+
+	@Override
+	public String UpdateStudent(int Id, StudentModel model) {
+		Student st = em.find(Student.class, Id);
+		if(model.getEmail() != null)
+			st.setEmail(model.getEmail());
+		if(model.getFirstName() != null)
+			st.setFirstName(model.getFirstName());		
+		if(model.getLastName() != null)
+			st.setLastName(model.getLastName());
+		em.merge(st);
+		return "Details updated successfully!";
+	}
+
+	@Override
+	public Student findStudentByID(int Id) {
+		Student st = em.find(Student.class, Id);
+		return st;
+	}
+
+	@Override
+	public List<CourseModel> findCoursesforStudentID(int Id) {
+		Student st = em.find(Student.class, Id);
+		List<Course> courses = st.getCourses();
+		List<CourseModel> list = new ArrayList();
+		for(Course cr : courses) {
+			list.add(cr.modelMapping());
+		}
+		return list;
+	}
+
+	@Override
+	public List<StudentModel> findAllStudentsInCourse(int Id) {
+		Course  course = em.find(Course.class, Id);
+		List<Student> students = course.getStudents();
+		List<StudentModel> list = new ArrayList();
+		for(Student st : students) {
+			list.add(st.modelMapping());
+		}
+		return list;
 	}
 	
 	

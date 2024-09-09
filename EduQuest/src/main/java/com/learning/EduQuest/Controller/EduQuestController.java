@@ -1,5 +1,6 @@
 package com.learning.EduQuest.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learning.EduQuest.DTO.CourseModel;
 import com.learning.EduQuest.DTO.InstructorModel;
 import com.learning.EduQuest.DTO.ReviewModel;
+import com.learning.EduQuest.DTO.StudentModel;
 import com.learning.EduQuest.Entity.Course;
 import com.learning.EduQuest.Entity.Instructor;
 import com.learning.EduQuest.Entity.InstructorDetail;
@@ -162,4 +165,65 @@ public class EduQuestController {
 		List<Review> reviews = instServ.getReviewsForCourse(courseId);
 		return reviews;
 	}
+	
+	/********Course-Student related API's**************/
+//	String addStudent(StudentModel model);
+//	
+//	String addStudentToCourse(int courseId, int studentId);
+//	
+//	String deleteStudent (int Id);
+//	
+//	String UpdateStudent (int Id, StudentModel student);
+//	
+//	Student findStudentByID (int Id);
+//	
+//	List<CourseModel> findCoursesforStudentID (int Id);
+//	
+//	List<StudentModel> findAllStudentsInCourse (int Id);
+//	
+	
+	@PostMapping("/student")
+	public String  addStudent (@RequestBody StudentModel st) {
+		String ans =instServ.addStudent(st);
+		return ans;
+	}
+	
+	@PostMapping("/enroll")
+	public String enrollStudent(@RequestParam int courseId, @RequestParam int studentId) {
+		String ans= instServ.addStudentToCourse(courseId,studentId);
+		return ans;
+	}
+	
+	@DeleteMapping("/student/{Id}")
+	public String deleteStudent(@PathVariable int Id){
+		String ans = instServ.deleteStudent(Id);
+		return ans;
+	}
+	
+	@PutMapping("/student/{Id}")
+	public String updateStudent(@PathVariable int Id, @RequestBody StudentModel model){
+		String ans = instServ.UpdateStudent(Id,model);
+		return ans;
+	}
+	
+	@GetMapping("/student/{Id}")
+	public ResponseEntity<StudentModel> findStudentById (@PathVariable int Id){
+		StudentModel model = instServ.findStudentByID(Id).modelMapping();
+		return new ResponseEntity<>(model,HttpStatus.OK);
+	}
+	
+	@GetMapping("/coursesforStud/{Id}")
+	public List<CourseModel> findCoursesforStudentID (@PathVariable int Id){
+		List<CourseModel> list = new ArrayList<>();
+		list = instServ.findCoursesforStudentID(Id);
+		return list;
+	}
+	
+	@GetMapping("/StudentsInCourse/{Id}")
+	public List<StudentModel> findAllStudentsInCourse (@PathVariable int Id){
+		List<StudentModel> list = new ArrayList<>();
+		list = instServ.findAllStudentsInCourse(Id);
+		return list;
+	}
+	
 }

@@ -11,8 +11,26 @@ public class CourseModel {
 	
 	private String title;
 	
+	private InstructorModel instructor;
+	
 	private List<ReviewModel> reviews;
 	
+	public InstructorModel getInstructor() {
+		return instructor;
+	}
+
+	public void setInstructor(InstructorModel instructor) {
+		this.instructor = instructor;
+	}
+
+	public List<ReviewModel> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<ReviewModel> reviews) {
+		this.reviews = reviews;
+	}
+
 	public int getId() {
 		return id;
 	}
