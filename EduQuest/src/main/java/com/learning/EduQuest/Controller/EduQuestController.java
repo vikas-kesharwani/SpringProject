@@ -101,6 +101,12 @@ public class EduQuestController {
 		return new ResponseEntity<>(inst,HttpStatus.OK);
 	}
 	
+	@GetMapping("/getAllCourse")
+	public ResponseEntity<List<CourseModel>> findAllCourse() throws Exception{
+		List<CourseModel> courses = instServ.findAllCourses();		
+		return new ResponseEntity<>(courses,HttpStatus.OK);
+	}
+	
 	@GetMapping("/instructorCourses/{Id}")
 	public List<CourseModel> findCoursesforInst(@PathVariable int Id) throws Exception{
 		List<CourseModel> courses = instServ.findCoursesforInst(Id);

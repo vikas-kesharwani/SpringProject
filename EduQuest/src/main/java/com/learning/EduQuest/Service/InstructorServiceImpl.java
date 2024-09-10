@@ -19,6 +19,7 @@ import com.learning.EduQuest.Entity.Review;
 import com.learning.EduQuest.Entity.Student;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -222,9 +223,17 @@ public class InstructorServiceImpl implements InstructorService {
 	}
 
 	@Override
-	public List<Course> findAllCourses() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CourseModel> findAllCourses() {
+		String jpql = "SELECT e FROM Course e";	    
+	    // Create a TypedQuery instance
+	    TypedQuery<Course> query = em.createQuery(jpql, Course.class);	    
+	    // Execute the query and get the result list
+	    List<Course> list = query.getResultList();
+	    List<CourseModel> modelList = new ArrayList<>();
+	    for(Course cr : list) {
+	    	modelList.add(cr.modelMapping());
+	    }
+		return modelList;
 	}
 
 	@Override

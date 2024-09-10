@@ -35,7 +35,7 @@ public interface InstructorService {
 	
 	String updateCourse(int courseId,CourseModel model);
 	
-	List<Course> findAllCourses();
+	List<CourseModel> findAllCourses();
 	
 	String updateInstructor(int Id,InstructorModel model);
 	
